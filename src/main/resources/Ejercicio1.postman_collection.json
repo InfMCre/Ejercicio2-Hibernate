@@ -1,0 +1,335 @@
+{
+	"info": {
+		"_postman_id": "261f78b4-047e-4ba7-b103-c9537635bded",
+		"name": "Ejercicio1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Employee",
+			"item": [
+				{
+					"name": "getEmployees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URI}}/employees",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEmployeeById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URI}}/employees/100",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"employees",
+								"100"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEmployeeWithBoss",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URI}}/employees/2/boss",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"employees",
+								"2",
+								"boss"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createEmployee",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mikel2\",\r\n    \"position\": \"Jefe2\",\r\n    \"salary\": 15000,\r\n    \"bossId\": 25,\r\n    \"departmentId\": 1\r\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/employees",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateEmployee",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"MikelUpdate\",\r\n    \"position\": \"Jefe2\",\r\n    \"salary\": 21500,\r\n    \"bossId\": 2,\r\n    \"departmentId\": 3\r\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/employees/7",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"employees",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteEmployee",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "content-type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{API_URI}}/employees/8",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"employees",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Department",
+			"item": [
+				{
+					"name": "getDepartments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URI}}/departments",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"departments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDepartmentById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URI}}/departments/2",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"departments",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createDepartment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"DepartamentoNuevo\",\r\n    \"city\": \"Erandio\"\r\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/departments",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"departments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createDepartment Copy",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"DepartamentoNuevo2\",\r\n    \"city\": \"Erandio2\"\r\n}"
+						},
+						"url": {
+							"raw": "{{API_URI}}/departments/9",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"departments",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteDepartment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_URI}}/departments/9",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"departments",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDepartmentEmployees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URI}}/departments/1/employees",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"departments",
+								"1",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDepartmentWithEmployees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URI}}/departments/1/expandido",
+							"host": [
+								"{{API_URI}}"
+							],
+							"path": [
+								"departments",
+								"1",
+								"expandido"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URI",
+			"value": "http://localhost:8080/api",
+			"type": "default"
+		}
+	]
+}
