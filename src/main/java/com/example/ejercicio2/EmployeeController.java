@@ -31,6 +31,7 @@ public class EmployeeController {
 		Employee employee = employeeRepository.findById(id).orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "No encontrado")
 		);
+
 		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
 	}
 	

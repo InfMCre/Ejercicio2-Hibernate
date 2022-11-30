@@ -1,18 +1,25 @@
 package com.example.ejercicio2;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.ForeignKey;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name="employees")
+// @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +31,18 @@ public class Employee {
 	private Long salary;
 
 
-	@ManyToOne()
-	@JoinColumn(name = "boss_id", foreignKey=@ForeignKey(name = "Fk_boss_id"))
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "boss_id", foreignKey=@ForeignKey(name = "Fk_boss_id" ))
+	@JsonManagedReference
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+	//@JsonBackReference
 	private Employee boss;
 
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "department_id", foreignKey=@ForeignKey(name = "Fk_department_id"))
+	@JsonManagedReference
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+	//@JsonBackReference
 	private Department department;
 
 	// anteriormente teniamos
@@ -110,6 +123,7 @@ public class Employee {
 		return "Employee [id=" + id + ", name=" + name + ", position=" + position + ", salary=" + salary + ", boss="
 				+ boss + ", department=" + department + "]";
 	}
+
 	
 	
 	
