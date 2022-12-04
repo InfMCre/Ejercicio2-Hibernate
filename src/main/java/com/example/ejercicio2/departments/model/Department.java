@@ -1,13 +1,11 @@
-package com.example.ejercicio2;
+package com.example.ejercicio2.departments.model;
 
 
 
 import java.util.List;
 
+import com.example.ejercicio2.employees.model.Employee;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,12 +17,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-import jakarta.persistence.JoinColumn;
-
 
 @Entity
 @Table(name="departments")
-// @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Department {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +31,6 @@ public class Department {
 	
 	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JsonBackReference
-	//@JsonManagedReference
 	private List<Employee> employees;
 	
 	public Department() {}
@@ -61,6 +55,10 @@ public class Department {
 		this.name = name;
 		this.city = city;
 		this.employees = employees;
+	}
+
+	public Department(Integer departmentId) {
+		super();
 	}
 
 	public Integer getId() {

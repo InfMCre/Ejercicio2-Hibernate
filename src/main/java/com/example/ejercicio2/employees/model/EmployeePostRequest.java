@@ -1,4 +1,4 @@
-package com.example.ejercicio2;
+package com.example.ejercicio2.employees.model;
 
 
 
@@ -8,12 +8,12 @@ public class EmployeePostRequest {
 	private String name;
 	private String position;
 	private Long salary;
-	private Long bossId;
-	private Long departmentId;
+	private Integer bossId;
+	private Integer departmentId;
 	
 	public EmployeePostRequest() {}
 
-	public EmployeePostRequest(String name, String position, Long salary, Long bossId, Long departmentId) {
+	public EmployeePostRequest(String name, String position, Long salary, Integer bossId, Integer departmentId) {
 		super();
 		this.name = name;
 		this.position = position;
@@ -46,19 +46,19 @@ public class EmployeePostRequest {
 		this.salary = salary;
 	}
 
-	public Long getBossId() {
+	public Integer getBossId() {
 		return bossId;
 	}
 
-	public void setBossId(Long bossId) {
+	public void setBossId(Integer bossId) {
 		this.bossId = bossId;
 	}
 
-	public Long getDepartmentId() {
+	public Integer getDepartmentId() {
 		return departmentId;
 	}
 
-	public void setDepartmentId(Long departmentId) {
+	public void setDepartmentId(Integer departmentId) {
 		this.departmentId = departmentId;
 	}
 

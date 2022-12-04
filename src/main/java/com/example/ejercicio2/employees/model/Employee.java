@@ -1,7 +1,6 @@
-package com.example.ejercicio2;
+package com.example.ejercicio2.employees.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.example.ejercicio2.departments.model.Department;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -15,11 +14,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.ForeignKey;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name="employees")
-// @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,20 +28,32 @@ public class Employee {
 	private Long salary;
 
 
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "boss_id", foreignKey=@ForeignKey(name = "Fk_boss_id" ))
 	@JsonManagedReference
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
-	//@JsonBackReference
 	private Employee boss;
+	
+	// vamos a setear la id del empleado, debemos decir que es una columna de la BBDD
+	// pero no es ni insertable ni actualizable, ya que lo gestiona desde la propiedadad "boss"
+	// de esta forma obtendremos el valor en el modelo, si no, omitirá la id del jefe.
+	@Column(name="boss_id", insertable=false, updatable=false)
+	private Integer bossId;
+	
+	
+	
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "department_id", foreignKey=@ForeignKey(name = "Fk_department_id"))
 	@JsonManagedReference
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
-	//@JsonBackReference
 	private Department department;
-
+	
+	@Column(name="department_id", insertable=false, updatable=false)
+	private Integer departmentId;
+	
+	
 	// anteriormente teniamos
 	// private Long bossId;
 	// private Long departmentId;
@@ -67,6 +76,19 @@ public class Employee {
 		this.position = position;
 		this.salary = salary;
 		this.boss = boss;
+		this.department = department;
+	}
+	
+
+	public Employee(Integer id, String name, String position, Long salary, Employee boss, Integer bossId,
+			Department department) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.position = position;
+		this.salary = salary;
+		this.boss = boss;
+		this.bossId = bossId;
 		this.department = department;
 	}
 
@@ -118,13 +140,29 @@ public class Employee {
 		this.department = department;
 	}
 
+	
+	public Integer getBossId() {
+		return bossId;
+	}
+
+	public void setBossId(Integer bossId) {
+		this.bossId = bossId;
+	}
+
+	public Integer getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Integer departmentId) {
+		this.departmentId = departmentId;
+	}
+
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", position=" + position + ", salary=" + salary + ", boss="
-				+ boss + ", department=" + department + "]";
+				+ boss + ", bossId=" + bossId + ", department=" + department + "]";
 	}
 
-	
 	
 	
 	
