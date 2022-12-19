@@ -19,8 +19,8 @@ import com.example.ejercicio2.departments.model.DepartmentServiceModel;
 import com.example.ejercicio2.departments.repository.DepartmentRepository;
 import com.example.ejercicio2.employees.model.Employee;
 import com.example.ejercicio2.employees.model.EmployeeServiceModel;
-@RestController
 @RequestMapping("api")
+@RestController
 public class DepartmentController {
 
 	@Autowired
