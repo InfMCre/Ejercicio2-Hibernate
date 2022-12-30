@@ -1,5 +1,7 @@
 package com.example.ejercicio2.employees;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,7 +169,5 @@ public class EmployeeController {
 		);
 		
 		return new ResponseEntity<EmployeeServiceModel>(response, HttpStatus.OK);
-	}
-	
-	
+	}	
 }

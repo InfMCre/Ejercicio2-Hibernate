@@ -70,11 +70,12 @@ public class WebSecurityConfig {
         	(authz) -> 
         				authz
         					//.requestMatchers("/api/employees/**").hasAnyAuthority("USER", "ROLE_USER")
-        					.requestMatchers("/api/employees/**").hasAnyAuthority("USER")
+        					// .requestMatchers("/api/employees/**").hasAnyAuthority("USER")
         					//.requestMatchers("/api/departments/**").hasAnyRole("ADMIN", "ROLE_ADMIN")
         					.requestMatchers("/api/auth/**").permitAll()
         					// .requestMatchers("/api/departments/**").hasAuthority(RoleEnum.USER.name())
-        					.anyRequest().authenticated()
+        					// .anyRequest().authenticated()
+        					.anyRequest().permitAll()
         					
         					// .and().exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint)
         );
