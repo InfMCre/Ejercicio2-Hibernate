@@ -5,9 +5,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -185,50 +190,72 @@ public class EmployeeController {
 	
 	
 	@PostMapping("/employees/images")
-	public ResponseEntity<EmployeeServiceModel> testImages(@RequestBody TestPostRequest employeePostRequest) throws IOException {
+	public ResponseEntity<EmployeeServiceModel> testImages(@RequestBody TestPostRequest employeePostRequest) 
+			throws IOException {
+		// aqui creariamos el modelo de respuesta, yo lo he creado en un controller de employee... 
+		// para crear el ejemplo
 		EmployeeServiceModel response = new EmployeeServiceModel();
-		
-		String fileName = "prueba11.png";
-		String [] fileAsStrings = employeePostRequest.getFile().split(",");
-		
-		byte[] imageBytes = Base64.getDecoder().decode(fileAsStrings[1]);
-		BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
-		
-		String mimeType = extractMimeType(employeePostRequest.getFile());
-		System.out.println(mimeType);
-		
-		File outputFile = new File("src/main/resources/static/images/avatars/" + fileName);
-		ImageIO.write(bufferedImage, mimeType.split("/")[1], outputFile);
 
+		String imageString = employeePostRequest.getFile();
+		// **** deberia hacerse toda la lógica en el SERVICE
+		// POdemos: pedir siempre una extension en concreto (forzarlo).
+		// sacar la extension del contenido con la siguiente función detectMimeType
+		// (https://stackoverflow.com/questions/57976898/how-to-get-mime-type-from-base-64-string),
+		// podemos pedir al usuario que incluya un campo con la extension y/o nombre completo del fichero.
+		// pero sería tan sencillo como pedir un campo mas en el TestPostRequest que es mi caso de ejemplo
+		
+		// generamos la ruta del archivo donde vamos a guardar
+		// lo voy a guardar dentro de src pero no se deberían guardar aquí las imagenes subidas por un usuario. 
+		// Para este proyecto nos vale por que es sencillo,
+		// pero cuidado estas imagenes acabarán en el git...
+		String extensionArchivo = detectMimeType(imageString);
+		String fileName = "prueba32" + extensionArchivo; // aqui el nombre esta hardcodeado...
+		String outputFile = "src/main/resources/static/images/avatars/" + fileName;
+		
+		// convertimos el String del fichero a bytes
+		byte[] decodedImg = Base64.getDecoder().decode(imageString.getBytes(StandardCharsets.UTF_8));
+		// guardamos la imagen con las dos siguientes lineas
+		Path destinationFile = Paths.get(outputFile);
+		Files.write(destinationFile, decodedImg);
+		
+		// devolvemos lo que queramos. aunque sea un 200
 		return new ResponseEntity<EmployeeServiceModel>(response, HttpStatus.OK);
 	}
 	
-
+	// el tipo de archivo está definido en la primera posición del string en base64
+	// (https://stackoverflow.com/questions/57976898/how-to-get-mime-type-from-base-64-string)
+	private String detectMimeType(String base64Content) {
+		HashMap<String, String> signatures = new HashMap<String, String>();
+		signatures.put("JVBERi0", ".pdf");
+		signatures.put("R0lGODdh", ".gif");
+		signatures.put("R0lGODdh", ".gif");
+		signatures.put("iVBORw0KGgo", ".png");
+		signatures.put("/9j/", ".pdf");
+		String response = ""; 
+		
+		for(Map.Entry<String, String> entry : signatures.entrySet()) {
+		    String key = entry.getKey();
+		    if (base64Content.indexOf(key) == 0) {
+		    	response = entry.getValue();
+		    }
+		}
+		return response;
+	}
+	
+	
 	@GetMapping("/employees/images")
 	public ResponseEntity<TestPostRequest> testImagesGet() throws IOException {
 		TestPostRequest response = new TestPostRequest();
 		
-		String fileName = "prueba11.png";
+		// conseguimos la ruta del archivo. 
+		// Esto si son avatares podría ser una ruta fija en función de la ID de usuario
+		// o mejor, guardaríamos la ruta en la BBDD en un campo, y la obtendríamos de ahi.
+		String fileName = "prueba32.png";
 		String filePath = "src/main/resources/static/images/avatars/" + fileName;
-		/*
-		// ok
-		File file = new File(filePath);
-		String extension = FilenameUtils.getExtension(filePath);
-		BufferedImage bufferedImage = ImageIO.read(file);
-		
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		ImageIO.write(bufferedImage, extension, byteArrayOutputStream );
-		byte [] data = byteArrayOutputStream.toByteArray();
-		
-		String image = "data:image/" + extension + ";base64," + Base64Utils.encodeToString(data);
-		response.setFile(image);
-		*/
 		
 		File file = new File(filePath);
         byte[] fileContent = Files.readAllBytes(file.toPath());
         response.setFile(Base64.getEncoder().encodeToString(fileContent));
-        //https://stackoverflow.com/questions/27886677/javascript-get-extension-from-base64-image
-		
 	
 		return new ResponseEntity<TestPostRequest>(response, HttpStatus.OK);
 	}
