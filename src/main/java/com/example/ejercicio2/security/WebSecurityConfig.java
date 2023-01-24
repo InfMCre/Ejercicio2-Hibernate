@@ -38,20 +38,19 @@ public class WebSecurityConfig {
 	@Autowired 
 	private JwtTokenFilter jwtTokenFilter;
 	
-	//@Autowired 
-	//private MyAuthenticationEntryPoint myAuthenticationEntryPoint;
-	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();
 	}
 	
-	// utilizado para encriptar las contraseñas en la DB
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		// return new BCryptPasswordEncoder();
+		return new CustomPasswordEncoder();
 	}
 
+	
+	
 //    @Override
 //    public void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());

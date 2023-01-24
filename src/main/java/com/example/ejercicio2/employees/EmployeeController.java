@@ -1,11 +1,24 @@
 package com.example.ejercicio2.employees;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.ejercicio2.departments.model.Department;
@@ -24,6 +38,7 @@ import com.example.ejercicio2.employees.model.Employee;
 import com.example.ejercicio2.employees.model.EmployeePostRequest;
 import com.example.ejercicio2.employees.model.EmployeeServiceModel;
 import com.example.ejercicio2.employees.model.EmployeesExpands;
+import com.example.ejercicio2.employees.model.TestPostRequest;
 import com.example.ejercicio2.employees.repository.EmployeeRepository;
 
 @RequestMapping("api")
@@ -167,4 +182,73 @@ public class EmployeeController {
 		
 		return new ResponseEntity<EmployeeServiceModel>(response, HttpStatus.OK);
 	}	
+	
+	
+	@PostMapping("/employees/images")
+	public ResponseEntity<EmployeeServiceModel> testImages(@RequestBody TestPostRequest employeePostRequest) throws IOException {
+		EmployeeServiceModel response = new EmployeeServiceModel();
+		
+		String fileName = "prueba11.png";
+		String [] fileAsStrings = employeePostRequest.getFile().split(",");
+		
+		byte[] imageBytes = Base64.getDecoder().decode(fileAsStrings[1]);
+		BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
+		
+		String mimeType = extractMimeType(employeePostRequest.getFile());
+		System.out.println(mimeType);
+		
+		File outputFile = new File("src/main/resources/static/images/avatars/" + fileName);
+		ImageIO.write(bufferedImage, mimeType.split("/")[1], outputFile);
+
+		return new ResponseEntity<EmployeeServiceModel>(response, HttpStatus.OK);
+	}
+	
+
+	@GetMapping("/employees/images")
+	public ResponseEntity<TestPostRequest> testImagesGet() throws IOException {
+		TestPostRequest response = new TestPostRequest();
+		
+		String fileName = "prueba11.png";
+		String filePath = "src/main/resources/static/images/avatars/" + fileName;
+		/*
+		// ok
+		File file = new File(filePath);
+		String extension = FilenameUtils.getExtension(filePath);
+		BufferedImage bufferedImage = ImageIO.read(file);
+		
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		ImageIO.write(bufferedImage, extension, byteArrayOutputStream );
+		byte [] data = byteArrayOutputStream.toByteArray();
+		
+		String image = "data:image/" + extension + ";base64," + Base64Utils.encodeToString(data);
+		response.setFile(image);
+		*/
+		
+		File file = new File(filePath);
+        byte[] fileContent = Files.readAllBytes(file.toPath());
+        response.setFile(Base64.getEncoder().encodeToString(fileContent));
+        //https://stackoverflow.com/questions/27886677/javascript-get-extension-from-base64-image
+		
+	
+		return new ResponseEntity<TestPostRequest>(response, HttpStatus.OK);
+	}
+	
+	private static String extractMimeType(final String encoded) {
+	    final Pattern mime = Pattern.compile("^data:([a-zA-Z0-9]+/[a-zA-Z0-9]+).*,.*");
+	    final Matcher matcher = mime.matcher(encoded);
+	    if (!matcher.find())
+	        return "";
+	    return matcher.group(1).toLowerCase();
+	}
+	/*
+    public static byte[] toByteArray(BufferedImage bi, String format)
+        throws IOException {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bi, format, baos);
+        byte[] bytes = baos.toByteArray();
+        return bytes;
+
+    }
+    */
 }

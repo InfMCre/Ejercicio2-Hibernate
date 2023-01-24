@@ -15,6 +15,7 @@ import com.example.ejercicio2.auth.persistence.Role;
 import com.example.ejercicio2.auth.persistence.User;
 import com.example.ejercicio2.auth.repository.RoleRepository;
 import com.example.ejercicio2.auth.repository.UserRepository;
+import com.example.ejercicio2.security.CustomPasswordEncoder;
 
 @Service("userDetailsService")
 public class UserServiceImpl implements UserDetailsService, UserService {
@@ -35,7 +36,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	
 	@Override
 	public User signUp(User user) {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		// Nuestro CustomPassowrdEncoder
+		CustomPasswordEncoder passwordEncoder = new CustomPasswordEncoder();
 		String password = passwordEncoder.encode(user.getPassword());
 		user.setPassword(password);
 
